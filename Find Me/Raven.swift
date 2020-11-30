@@ -1,5 +1,5 @@
 //
-//  SpaceShip.swift
+//  Raven.swift
 //  Find Me
 //
 //  Created by Elsa B on 11/1/20.
@@ -7,10 +7,10 @@
 
 import ARKit
 
-class SpaceShip: SCNNode {
+class Raven: SCNNode {
     
     func loadModal() {
-        guard let virtualOjectScene = SCNScene(named: "art.scnassets/ship.scn") else {return}
+        guard let virtualOjectScene = SCNScene(named: "art.scnassets/openRaven.scn") else {return}
         
         let wrapperNode = SCNNode()
         

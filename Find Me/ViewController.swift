@@ -18,8 +18,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet var sceneView: ARSCNView!
     @IBOutlet weak var timeLabel: UILabel!
     
-      
 
+
+      
+let alertService = AlertService()
+    
 var timer:Timer?
 var seconds = 10
 var counter:Int = 0 {
@@ -35,15 +38,11 @@ override func viewDidLoad() {
 
     sceneView.scene = scene
     sceneView.autoenablesDefaultLighting = true
-
-    //round counter
-    counterLabel.layer.cornerRadius = 20
-    counterLabel.layer.masksToBounds = true
-
-    timeLabel.layer.cornerRadius = 20
-    timeLabel.layer.masksToBounds = true
-
     updateTimeLabel()
+    
+    let alertVCView = storyboard?.instantiateViewController(withIdentifier: "AlertVC")
+    self.view.addSubview((alertVCView?.view)!)
+    self.addChild(alertVCView!)
     
 
 }
@@ -68,18 +67,22 @@ override func viewWillAppear(_ animated: Bool) {
 }
 
 func GameStartAlert(){
-        
-    let alert = UIAlertController(title: "Welcome To \"Find Me\"!", message: "Try and find the raven and click it as many times as possible, before the time runs out! ", preferredStyle: .alert)
-        
-    alert.addAction(UIAlertAction(title: "Let's Start", style: .default, handler: nil))
-    
+//        
+//    let alert = UIAlertController(title: "Welcome To \"Find Me\"!", message: "Try and find the raven and click it as many times as possible, before the time runs out! ", preferredStyle: .alert)
+//
+//    alert.addAction(UIAlertAction(title: "Let's Start", style: .default, handler: nil))
+//
 //    let alertImage = UIImage(named: "Launch")
 //    let alertImageView = UIImageView(frame: CGRect(x: 0, y: 0, width:842, height: 332))
 //   alertImageView.image = alertImage
 //
-        
-    self.present(alert, animated: true, completion: nil)
+//
+//    self.present(alert, animated: true, completion: nil)
     
+   
+    let alertVC=alertService.alert(title: "Welcome To Find Me!", body: "Try and find the raven and click it as many times as possible, before the time runs out!", buttonTitle: "Let's Start")
+    //addChild(alertVC)
+    present(alertVC,animated: true)
 }
 
 func addObject() {
@@ -89,15 +92,15 @@ func addObject() {
 
     sceneView.scene.rootNode.addChildNode(spotLight)
 
-    let ship = SpaceShip()
-    ship.loadModal()
+    let raven = Raven()
+    raven.loadModal()
 
     let xPos = randomPosition(lowerBound: -1.5, upperBound: 1.5)
     let yPos = randomPosition(lowerBound: -1.5, upperBound: 1.5)
 
-    ship.position = SCNVector3(xPos, yPos, -1)
+    raven.position = SCNVector3(xPos, yPos, -1)
 
-    sceneView.scene.rootNode.addChildNode(ship)
+    sceneView.scene.rootNode.addChildNode(raven)
 
 }
 
@@ -118,7 +121,7 @@ override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let hitObject = hitList.first {
             let node = hitObject.node
           print("passed if")
-            if node.name == "VRShip" {                      counter += 1
+            if node.name == "VRRaven" {                      counter += 1
                 node.removeFromParentNode()
                 addObject()
             }
@@ -152,10 +155,12 @@ func finishGame(){
   alert.addAction(UIAlertAction(title: "OK, start new game", style: .default, handler: nil))
 
   self.present(alert, animated: true, completion: nil)
-
+//        let alertVC=alertService.alert(title:"Time's Up!", body: "Your time is up! You got a score of \(counter) points. Awesome!", buttonTitle:  "OK, start new game")
+//        present(alertVC,animated: true)
+    
   counter = 0
   seconds = 10
   updateTimeLabel()
 }
-}
+    }
 
